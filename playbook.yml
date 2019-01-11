@@ -1,6 +1,6 @@
 -
-  name: Deploy a web application
-  hosts: db_and_web_server
+  name: Internal servers automation
+  hosts: internals
   tasks:
     - name: Install dependencies
       apt: name={{ item }} state=present
@@ -10,7 +10,5 @@
        - python-dev
        - build-essential
        - python-pip
-       - python-mysqldb
 
-    - include: tasks/deploy_db.yaml
-    - include: tasks/deploy_web.yaml
+    - include: tasks/fail2ban.yaml
