@@ -1,0 +1,63 @@
+- name: Check packages for updates
+  shell: apt-get --simulate dist-upgrade
+  changed_when: upgrade.stdout_lines | length > 0
+  args:
+    warn: false
+  register: upgrade
+
+- name: Display count of packages to be updated
+  debug:
+    msg: "Found {{ upgrade.stdout_lines | length }} packages to be updated:\n\n{{ upgrade.stdout }}"
+
+- when: upgrade.stdout_lines | length > 0
+  block:
+    - name: Update APT package cache
+      apt: update_cache=yes cache_valid_time=600
+      changed_when: 0
+
+    - name: Upgrade to the latest packages
+      apt: upgrade=dist
+      register: result
+
+    - name: Install apt-utils
+      package:
+        name: apt-utils
+
+    - name: Autoremove unused packages
+      command: apt-get -y autoremove
+      register: result
+      changed_when: "'packages will be REMOVED' in result.stdout"
+
+    - name: Purge old / unused kernel packages
+      shell: apt-get remove -y --purge $(dpkg -l | grep "^rc\s*linux-image-" | awk '{print $2}' | tr '\n' ' ')
+      register: result
+      changed_when: "'packages will be REMOVED' in result.stdout"
+
+    - name: Check if reboot is required
+      shell: "[ -f /var/run/reboot-required ]"
+      failed_when: false
+      register: reboot_required
+      changed_when: false
+      become: yes
+      notify: reboot-server
+
+
+- when: upgrade.stdout_lines | length > 0 and reboot_required.rc != 0
+  block:
+    - name: Wait for server to come back after reboot
+      wait_for_connection:
+        timeout: 180
+        delay: 20
+      register: reboot_result
+
+    - name: Verify new update (optional)
+      command: uname -mrs
+      register: uname_result
+
+    - name: Display new kernel version
+      debug:
+          var: uname_result.stdout_lines
+
+    - name: Reboot time
+      debug:
+        msg: "The system rebooted in {{ reboot_result.elapsed }} seconds."

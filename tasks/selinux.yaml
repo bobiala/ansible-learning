@@ -1,2 +1,0 @@
-- name: no selinux
-  command: /usr/sbin/setenforce 0

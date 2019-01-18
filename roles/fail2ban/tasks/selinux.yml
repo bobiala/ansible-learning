@@ -1,0 +1,4 @@
+- name: Set Selinux in Permissive mode
+  selinux:
+    policy: targeted
+    state: permissive
