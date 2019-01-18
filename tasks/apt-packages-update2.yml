@@ -1,0 +1,26 @@
+---
+
+- name: Update APT package cache
+  apt: update_cache=yes cache_valid_time=600
+
+- name: Upgrade to the latest packages
+  apt: upgrade=dist
+  register: result
+
+- name: Autoremove unused packages
+  command: apt-get -y autoremove
+  register: result
+  changed_when: "'packages will be REMOVED' in result.stdout"
+
+- name: Purge old / unused kernel packages
+  shell: apt-get remove -y --purge $(dpkg -l | grep "^rc\s*linux-image-" | awk '{print $2}' | tr '\n' ' ')
+  register: result
+  changed_when: "'packages will be REMOVED' in result.stdout"
+
+- name: check if a reboot is required
+  shell: "[ -f /var/run/reboot-required ]"
+  failed_when: False
+  register: reboot_required
+  changed_when: reboot_required.rc == 0
+  notify: 
+    - reboot server
