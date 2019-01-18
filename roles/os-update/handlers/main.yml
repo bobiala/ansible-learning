@@ -1,2 +1,3 @@
 - name: reboot server
-  command: /sbin/shutdown -r now 'Rebooting box to update system libs/kernel as needed'
+  reboot:
+    msg: 'Rebooting box to update system libs/kernel as needed'
