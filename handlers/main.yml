@@ -1,0 +1,7 @@
+- name: restart fail2ban
+  service:
+    name: fail2ban
+    state: restarted
+
+- name: reboot server
+  command: /sbin/shutdown -r now 'Rebooting box to update system libs/kernel as needed'
