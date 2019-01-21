@@ -5,7 +5,6 @@
 
 - name: Upgrade to the latest packages
   apt: upgrade=dist
-  register: result
 
 - name: Autoremove unused packages
   command: apt-get -y autoremove
