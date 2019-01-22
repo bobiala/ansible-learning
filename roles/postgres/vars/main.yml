@@ -21,11 +21,7 @@ docker_postgres__pg_hba_conf: |
   local   all             all                                     trust
   host    all             all             127.0.0.1/32            trust
   host    all             all             ::1/128                 trust
-  local   replication     all                                     trust
-  host    replication     all             127.0.0.1/32            trust
-  host    replication     all             ::1/128                 trust
   host    all             all             all                     md5
-  host    replication     {{ docker_postgres__superuser_name }}        all                     md5
 
 docker_postgres__postgresql_conf: |
   # This file is managed by Ansible, all changes will be lost.
