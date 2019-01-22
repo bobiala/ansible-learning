@@ -18,10 +18,11 @@ docker_postgres__remove_existing_home_dir: no
 docker_postgres__pg_hba_conf: |
   # This file is managed by Ansible, all changes will be lost.
   # TYPE  DATABASE        USER            ADDRESS                 METHOD
-  local   all             all                                     trust
-  host    all             all             127.0.0.1/32            trust
-  host    all             all             ::1/128                 trust
-  host    all             all             all                     md5
+  host    all             all             127.0.0.1/32            md5
+  host    all             all             172.17.0.1/16           md5
+  host    all             all             192.168.1.10/32         md5
+  # IPv6 local connections:
+  host    all             all             ::1/128                 md5
 
 docker_postgres__postgresql_conf: |
   # This file is managed by Ansible, all changes will be lost.
