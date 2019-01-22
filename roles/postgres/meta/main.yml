@@ -1,0 +1,4 @@
+---
+
+dependencies:
+- { role: levonet.docker_postgres }

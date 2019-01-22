@@ -1,0 +1,35 @@
+- name:  Install common packages
+  apt:
+    name:  "{{ packages }}"
+    state: present
+    update_cache:  yes
+  vars:
+    packages:
+      - python
+      - python-setuptools
+      - python-dev
+      - build-essential
+      - python-pip
+      - htop
+      - git
+
+- name: Install latest pip version
+  pip:
+    name: pip
+    extra_args: --upgrade
+
+- name: Install docker by pip 
+  pip:
+    name: docker
+    state: latest
+
+- name:  Install Ubuntu 16 (and older) packages
+  apt:
+    name:  "{{ packages }}"
+    state: present
+    update_cache:  yes
+  when: ansible_facts['os_family'] == "Debian" and ansible_facts['distribution_major_version'] >= "16"
+  vars:
+    packages:
+      - php7.0
+      - libapache2-mod-php

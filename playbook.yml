@@ -2,5 +2,6 @@
   name: Internal servers automation
   hosts: internals
   roles:
-    - os-update
-
+    - base-packages
+    - postgres
+   
