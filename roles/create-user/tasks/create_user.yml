@@ -1,0 +1,24 @@
+- name: Create user 'postgres' with a bash shell and the group 'postgres'
+  user:
+    name: postgres
+    shell: /bin/bash
+
+- name: Create 'postgres' group
+  group:
+    name: postgres
+    state: present
+
+- name: Append user postgres to group 'postgres'
+  user:
+    name: postgres
+    shell: /bin/bash
+    groups: postgres
+    append: yes
+
+- name: check user's UID 
+  getent:
+    database: passwd
+    key: postgres
+
+- debug:
+    var: getent_passwd

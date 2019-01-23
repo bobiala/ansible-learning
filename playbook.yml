@@ -2,6 +2,7 @@
   name: Internal servers automation
   hosts: internals
   roles:
-    - base-packages
-    - postgres
+    - create-user
+ #   - base-packages
+ #   - postgres
    

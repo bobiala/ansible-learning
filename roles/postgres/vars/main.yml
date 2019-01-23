@@ -1,6 +1,6 @@
 ---
 
-docker_postgres__name: postgres
+docker_postgres__name: postgres-9.4
 docker_postgres__image: postgres:9.4
 docker_postgres__port: 5432
 docker_postgres__superuser_name: postgres
@@ -47,8 +47,8 @@ docker_postgres__directories:
 - path: "{{ docker_postgres__home }}"
   mode: "0700"
 - path: "{{ docker_postgres__home }}/data"
-  owner: 70
-  group: 70
+  owner: 112
+  group: 112
 - path: "{{ docker_postgres__home }}/conf"
 docker_postgres__ports:
 - "{{ docker_postgres__port }}:5432"
