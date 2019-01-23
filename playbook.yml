@@ -3,6 +3,6 @@
   hosts: internals
   roles:
     - create-user
- #   - base-packages
- #   - postgres
+    - base-packages
+    - postgres
    

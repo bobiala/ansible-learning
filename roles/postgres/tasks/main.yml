@@ -1,10 +1,4 @@
 ---
-# needed by docker_container ansible module to work
 
-- pip:
-    name: pip
-    extra_args: --upgrade
-
-- pip:
-    name: docker
-    state: latest
+- include: postgres.yml
+  tags: [postgres]
