@@ -7,7 +7,7 @@ docker_postgres_expose:
 docker_postgres_ports:
   - 5432:5432
 docker_postgres_container_data_dir: /var/lib/postgresql/data
-docker_postgres_host_data_dir: /opt/postgres/data
+docker_postgres_host_data_dir: /var/lib/postgres/9.4/data
 docker_postgres_env:
   POSTGRES_DB: postgres
   POSTGRES_USER: postgres
@@ -15,14 +15,11 @@ docker_postgres_env:
   PGDATA : "{{ docker_postgres_container_data_dir }}/pgdata"
 docker_postgres_links: []
 docker_postgres_directory_volumes:
-  - "{{ docker_postgres_host_data_dir }}:{{ docker_postgres_container_data_dir }}:rw"
+  - "{{ docker_postgres_container_data_dir }}:{{ docker_postgres_host_data_dir }}:rw"
 docker_postgres_file_volumes: []
 docker_postgres_template_path: ""
 docker_postgres_volumes: "{{ docker_postgres_directory_volumes + docker_postgres_file_volumes }}"
-docker_postgres_log_driver: syslog
-docker_postgres_log_opt:
-  syslog-facility: local0
-  tag: "{{ docker_postgres_name }}"
+docker_postgres_log_driver: json-file
 
 docker_postgres__pg_hba_conf: |
   # This file is managed by Ansible, all changes will be lost.

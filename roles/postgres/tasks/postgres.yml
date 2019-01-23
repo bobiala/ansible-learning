@@ -49,7 +49,6 @@
     name: "{{ docker_postgres_name }}"
     ports: "{{ docker_postgres_ports }}"
     log_driver: "{{ docker_postgres_log_driver }}"
-    log_opt: "{{ docker_postgres_log_opt }}"
     pull: yes
     restart_policy: always
     state: started
