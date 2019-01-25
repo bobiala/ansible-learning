@@ -1,0 +1,33 @@
+- name: Override locale.gen
+  copy:
+    src: ../files/locale.gen
+    dest: /data/postgres/etc/locale.gen
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create database Hire_Help_Devel
+  postgresql_db:
+    name: hire_help_devel
+    login_host: localhost
+    login_password: postgres
+    port: 5432
+    encoding: UTF-8
+    lc_collate: 'pl_PL.UTF-8'
+    lc_ctype: 'pl_PL.UTF-8'
+    template: template0
+    state: present
+  become_user: postgres
+
+- name: Create database Hire_Help_Clone
+  postgresql_db:
+    name: hire_help_devel
+    login_host: localhost
+    login_password: postgres
+    port: 5432
+    encoding: UTF-8
+    lc_collate: 'pl_PL.UTF-8'
+    lc_ctype: 'pl_PL.UTF-8'
+    template: template0
+    state: present
+  become_user: postgres
