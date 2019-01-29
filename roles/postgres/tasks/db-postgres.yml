@@ -1,11 +1,3 @@
-- name: Override locale.gen
-  copy:
-    src: locale.gen
-    dest: /data/postgres/etc/locale.gen
-    owner: root
-    group: root
-    mode: 0644
-
 - name: Create database Hire_Help_Devel
   postgresql_db:
     name: hire_help_devel
