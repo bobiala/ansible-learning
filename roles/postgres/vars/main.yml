@@ -46,6 +46,9 @@ docker_postgres__ports:
 docker_postgres__directory_volumes:
 - "{{ docker_postgres__home }}/conf:/etc/postgresql"
 - "{{ docker_postgres__home }}/data:/var/lib/postgresql/data"
+- "/data/postgres/etc/locale.gen:/etc/locale.gen"
 docker_postgres__default_env:
   POSTGRES_USER: "{{ docker_postgres__superuser_name }}"
   POSTGRES_PASSWORD: "{{ docker_postgres__superuser_password }}"
+  LANG: pl_PL.UTF-8
+  LANGUAGE: pl_PL.UTF-8
