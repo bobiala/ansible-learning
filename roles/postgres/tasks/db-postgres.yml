@@ -13,7 +13,7 @@
 
 - name: Create database Hire_Help_Clone
   postgresql_db:
-    name: hire_help_devel
+    name: hire_help_clone
     login_host: localhost
     login_password: postgres
     port: 5432
