@@ -15,25 +15,6 @@ docker_postgres__log_driver: json-file
 docker_postgres__wait_for_start: no
 docker_postgres__remove_existing_home_dir: no
 
-docker_postgres__pg_hba_conf: |
-  # This file is managed by Ansible, all changes will be lost.
-  # TYPE  DATABASE        USER            ADDRESS                 METHOD
-  local   all             all                                     trust
-  host    all             all             127.0.0.1/32            trust
-  local   replication     all                                     trust
-  host    replication     all             127.0.0.1/32            trust
-  host    all             all             all                     md5
-
-docker_postgres__postgresql_conf: |
-  # This file is managed by Ansible, all changes will be lost.
-  listen_addresses = '*'
-  max_connections = 100
-  shared_buffers = 128MB
-  dynamic_shared_memory_type = posix
-  log_timezone = 'UTC'
-  datestyle = 'iso, mdy'
-  default_text_search_config = 'pg_catalog.english'
-
 # Don't change
 docker_postgres__home: "/opt/{{ docker_postgres__name }}"
 docker_postgres__directories:
@@ -47,8 +28,7 @@ docker_postgres__directory_volumes:
 - "{{ docker_postgres__home }}/conf:/etc/postgresql"
 - "{{ docker_postgres__home }}/data:/var/lib/postgresql/data"
 - "/data/postgres/etc/locale.gen:/etc/locale.gen"
+- "/data/postgres/entrypoint.sh:/entrypoint.sh"
 docker_postgres__default_env:
   POSTGRES_USER: "{{ docker_postgres__superuser_name }}"
   POSTGRES_PASSWORD: "{{ docker_postgres__superuser_password }}"
-  LANG: pl_PL.UTF-8
-  LANGUAGE: pl_PL.UTF-8

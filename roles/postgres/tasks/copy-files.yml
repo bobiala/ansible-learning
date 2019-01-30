@@ -1,7 +1,0 @@
-- name: Override locale.gen
-  copy:
-    src: locale.gen
-    dest: /data/postgres/etc/locale.gen
-    owner: root
-    group: root
-    mode: 0644

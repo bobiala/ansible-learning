@@ -24,10 +24,27 @@
     content: "{{ docker_postgres__postgresql_conf }}"
     dest: "{{ docker_postgres__home }}/conf/postgresql.conf"
 
+- name: Copy entrypoint
+  copy:
+    src: entrypoint.sh
+    owner: root
+    group: root
+    mode: 0777
+    dest: "/data/postgres/entrypoint.sh"
+
+- name: Override locale.gen
+  copy:
+    src: locale.gen
+    dest: /data/postgres/etc/locale.gen
+    owner: root
+    group: root
+    mode: 0644
+
 - name: Run postgres container
   docker_container:
     name: "{{ docker_postgres__name }}"
     image: "{{ docker_postgres__image }}"
+    entrypoint: "/entrypoint.sh"
     command: --config_file=/etc/postgresql/postgresql.conf --hba_file=/etc/postgresql/pg_hba.conf
     pull: "{{ docker_postgres__pull_image }}"
     restart_policy: always
@@ -41,3 +58,13 @@
     volumes: "{{ docker_postgres__directory_volumes + docker_postgres__file_volumes }}"
     log_driver: "{{ docker_postgres__log_driver }}"
     state: started
+
+- name: Wait for postgres to accept connections
+  wait_for:
+    host: 127.0.0.1
+    port: 5432
+    state: started
+    timeout: 30
+  register: postgres_running
+  until: postgres_running is success
+  retries: 10

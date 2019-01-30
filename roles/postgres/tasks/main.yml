@@ -1,7 +1,5 @@
 ---
 
-- include: copy-files.yml
-
 - include: docker-postgres.yml
 
 - include: db-postgres.yml
