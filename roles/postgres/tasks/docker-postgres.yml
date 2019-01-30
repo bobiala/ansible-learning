@@ -15,14 +15,20 @@
   with_items: "{{ docker_postgres__directories }}"
 
 - name: Copy pg_hba config
-  copy:
-    content: "{{ docker_postgres__pg_hba_conf }}"
+  template:
+    src: "pg_hba.conf.j2"
     dest: "{{ docker_postgres__home }}/conf/pg_hba.conf"
+    owner: root
+    group: root
+    mode: 0664
 
 - name: Copy postgresql config
-  copy:
-    content: "{{ docker_postgres__postgresql_conf }}"
+  template:
+    src: "postgresql.conf.j2"
     dest: "{{ docker_postgres__home }}/conf/postgresql.conf"
+    owner: root
+    group: root
+    mode: 0664
 
 - name: Copy entrypoint
   copy:
