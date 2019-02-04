@@ -14,14 +14,28 @@ docker_postgres__env: {}
 docker_postgres__log_driver: json-file
 docker_postgres__wait_for_start: no
 docker_postgres__remove_existing_home_dir: no
+postgres_local_user: postgres
+postgres_local_group: postgres
+postgres_state: started
 
-# Don't change
+postgres_login_host: localhost
+postgres_login_password: postgres
+postgres_encoding: UTF-8
+postgres_lc_collate: pl_PL.utf8
+postgres_lc_ctype: pl_PL.utf8
+postgres_template: template0
+
 docker_postgres__home: "/opt/{{ docker_postgres__name }}"
 docker_postgres__directories:
 - path: "{{ docker_postgres__home }}"
   mode: "0777"
+  user: "{{uid}}:{{gid}}"
 - path: "{{ docker_postgres__home }}/data"
+  user: "{{uid}}:{{gid}}"
 - path: "{{ docker_postgres__home }}/conf"
+  user: "{{uid}}:{{gid}}"
+- path: "/data/postgres/etc/"
+  user: "{{uid}}:{{gid}}"
 docker_postgres__ports:
 - "{{ docker_postgres__port }}:5432"
 docker_postgres__directory_volumes:

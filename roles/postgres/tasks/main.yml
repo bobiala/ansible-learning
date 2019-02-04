@@ -1,5 +1,7 @@
 ---
 
+- include: setup.yml
+
 - include: docker-postgres.yml
 
 - include: db-postgres.yml

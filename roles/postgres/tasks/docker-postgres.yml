@@ -8,9 +8,9 @@
   file:
     state: directory
     path: "{{ item.path }}"
-    mode: "{{ item.mode | default(0777) }}"
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
+    mode: 0777
+    owner: "{{ postgres_local_user }}"
+    group: "{{ postgres_local_group }}"
     recurse: yes
   with_items: "{{ docker_postgres__directories }}"
 
@@ -18,16 +18,16 @@
   template:
     src: "pg_hba.conf.j2"
     dest: "{{ docker_postgres__home }}/conf/pg_hba.conf"
-    owner: root
-    group: root
+    owner: "{{ postgres_local_user }}"
+    group: "{{ postgres_local_group }}"
     mode: 0664
 
 - name: Copy postgresql config
   template:
     src: "postgresql.conf.j2"
     dest: "{{ docker_postgres__home }}/conf/postgresql.conf"
-    owner: root
-    group: root
+    owner: "{{ postgres_local_user }}"
+    group: "{{ postgres_local_group }}"
     mode: 0664
 
 - name: Copy entrypoint
@@ -59,7 +59,7 @@
     expose:
     - 5432
     ports: "{{ docker_postgres__ports }}"
-    user: root:root
+    user: "{{uid}}:{{gid}}"
     env: "{{ docker_postgres__default_env | combine(docker_postgres__env) }}"
     volumes: "{{ docker_postgres__directory_volumes + docker_postgres__file_volumes }}"
     log_driver: "{{ docker_postgres__log_driver }}"
