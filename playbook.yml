@@ -1,8 +1,9 @@
 -
   name: Internal servers automation
-  hosts: internals
+  hosts: dev
   roles:
 #    - create-user
 #    - base-packages
-    - postgres
-   
+#    - postgres
+     - fail2ban   
+  become: yes

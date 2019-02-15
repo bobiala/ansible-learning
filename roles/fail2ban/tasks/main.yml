@@ -1,5 +1,10 @@
 ---
    
-- include: tasks/fail2ban.yml
+- include: tasks/fail2ban-debian.yml
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+- include: tasks/fail2ban-centos.yml
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
 - include: tasks/selinux.yml
   when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'

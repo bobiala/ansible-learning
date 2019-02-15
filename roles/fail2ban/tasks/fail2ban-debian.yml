@@ -1,16 +1,17 @@
+---
+
 - name: Install Fail2Ban from package
-  apt: 
-    name: fail2ban   
+  package:
+    name: fail2ban
     state: latest
     update_cache: yes
-    cache_valid_time: 3600
-  
+
 - name: Override the basic fail2ban configuration with custom jail.local file
   copy:
-    src: ../files/jail.local
+    src: ../files/jail_debian.local
     dest: /etc/fail2ban/jail.local
     owner: root
     group: root
     mode: 0644
-  notify: 
-    - restart fail2ban      
+  notify:
+    - restart fail2ban
