@@ -1,0 +1,14 @@
+---
+
+- name: Create databases
+  postgresql_db:
+    name: "{{ item.name }}"
+    login_host: "{{ postgres_login_host }}"
+    login_password: "{{ postgres_password }}"
+    port: 5432    
+    encoding: "{{ item.encoding }}"    
+    lc_collate: "{{ item.lc_collate }}"
+    lc_ctype: "{{ item.lc_ctype }}"
+    template: "{{ item.template }}"
+    state: present
+  become: postgres

@@ -1,0 +1,17 @@
+---
+
+- name: restart postgres
+  docker_container:
+    name: "{{ postgres_name }}"
+    image: "{{ postgres_image }}"
+    command: --config_file=/etc/postgresql/postgresql.conf --hba_file=/etc/postgresql/pg_hba.conf
+    pull: "{{ postgres_pull_image }}"
+    restart_policy: always
+    expose:
+    - 5432
+    ports: "{{ postgres_ports }}"
+    env: "{{ postgres_default_env | combine(postgres_env) }}"
+    volumes: "{{ postgres_directory_volumes }}"
+    log_driver: "{{ postgres_log_driver }}"
+    state: started
+    restart: yes

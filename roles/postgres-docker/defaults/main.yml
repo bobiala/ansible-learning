@@ -1,0 +1,33 @@
+---
+
+postgres_name: postgres
+postgres_image: scalaconsultants/postgres:latest
+postgres_port: 5432
+postgres_superuser_name: postgres
+postgres_superuser_password: "{{ postgres_password }}"
+postgres_pull_image: yes
+postgres_network_mode:
+postgres_env: {}
+postgres_log_driver: json-file
+postgres_wait_for_start: no
+postgres_remove_existing_home_dir: no
+postgres_local_user: postgres
+postgres_local_group: postgres
+postgres_state: started
+postgres_login_host: localhost
+postgres_password: postgres
+
+postgres_home: "/opt/{{ postgres_name }}"
+postgres_directories:
+- path: "{{ postgres_home }}"
+  mode: "0777"
+- path: "{{ postgres_home }}/data"
+- path: "{{ postgres_home }}/conf"
+postgres_ports:
+- "{{ postgres_port }}:5432"
+postgres_directory_volumes:
+- "{{ postgres_home }}/conf:/etc/postgresql"
+- "{{ postgres_home }}/data:/var/lib/postgresql/data"
+postgres_default_env:
+  POSTGRES_USER: "{{ postgres_superuser_name }}"
+  POSTGRES_PASSWORD: "{{ postgres_superuser_password }}"

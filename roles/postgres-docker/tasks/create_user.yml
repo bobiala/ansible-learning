@@ -1,0 +1,14 @@
+---
+
+- name: "Create user {{ item.name }}"
+  postgresql_user:
+    login_host: "{{ postgres_login_host }}"
+    login_password: "{{ postgres_password }}"
+    port: 5432
+    db: "{{ item.name }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password}}"
+    encrypted: "{{ item.encrypted }}"
+    state: present
+    priv: "{{ item.priv }}"
+    expires: "infinity"

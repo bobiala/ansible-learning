@@ -1,0 +1,4 @@
+FROM postgres:9.4.20
+
+# Set the locale
+RUN apt-get update && apt-get upgrade -y && apt install locales-all

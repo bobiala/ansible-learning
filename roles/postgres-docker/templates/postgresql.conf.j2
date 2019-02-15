@@ -1,0 +1,14 @@
+listen_addresses = '*'
+unix_socket_directories = '/var/run/postgresql'
+max_connections = 100
+shared_buffers = 128MB
+dynamic_shared_memory_type = posix
+log_timezone = 'UTC'
+datestyle = 'iso, mdy'
+default_text_search_config = 'pg_catalog.english'
+
+# These settings are initialized by initdb, but they can be changed.
+lc_messages = 'pl_PL.utf8'            # locale for system error message
+lc_monetary = 'pl_PL.utf8'            # locale for monetary formatting
+lc_numeric = 'pl_PL.utf8'            # locale for number formatting
+lc_time = 'pl_PL.utf8'                # locale for time formatting

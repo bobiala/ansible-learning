@@ -1,0 +1,18 @@
+---
+
+
+- include: docker-login.yml
+
+- include: setup.yml
+
+- include: create_db.yml
+  with_items: "{{ psql_dbs }}"
+  when: psql_dbs is defined
+
+- include: create_user.yml
+  with_items:
+    - "{{ psql_users }}"
+  no_log: True
+  when: psql_users is defined
+
+- include: backup.yml

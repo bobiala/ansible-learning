@@ -1,0 +1,3 @@
+  - name: Login to DockerHub
+    shell: docker login -u "{{ dockerhub_login }}" -p "{{ dockerhub_passwd }}"
+

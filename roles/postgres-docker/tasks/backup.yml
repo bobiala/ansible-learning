@@ -1,0 +1,37 @@
+---
+
+- name: Create backup dirs
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0775
+    recurse: yes
+  with_items:
+    - /data/backup/postgresql
+    - /data/system/cron
+
+- name: Copy postgres dump script
+  template:
+    src: postgresql_backup.sh
+    dest: /data/system/cron/postgresql_backup.sh
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy postgres passwd file
+  template:
+    src: postgres_password
+    dest: /data/system/cron/postgres_password
+    owner: root
+    group: root
+    mode: 0400
+
+- name: Make Postgresql dumps
+  cron:
+    name: "postgresql dumps"
+    minute: "0"
+    hour: "1"
+    job: "/data/system/cron/postgresql_backup.sh && curl -fsS --retry 3 {{ crontab_postgres_backup_monitoring_link | default('https://google.com') }} > /dev/null"
+

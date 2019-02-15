@@ -1,0 +1,100 @@
+- name: Install 9.5 postgresql client
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - postgresql-client-common
+    - postgresql-client-9.5
+  when: ansible_distribution == 'Ubuntu' and ansible_facts['distribution_major_version'] > "15"
+
+- name: Install postgresql 9.5 client
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - postgresql
+    - postgresql-libs
+  when: ansible_distribution == 'CentOS'
+
+- name: Install Psycopg2
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - python-psycopg2
+
+- name: Create the postgres groups
+  group:
+    name: "{{ postgres_local_group }}"
+  notify: restart postgres
+
+- name: Create the postgres user
+  user:
+    name: "{{ postgres_local_user }}"
+    shell: /bin/false
+    groups: "{{ postgres_local_group }}"
+    create_home: no
+    password_lock: yes
+    expires: -1
+  notify: restart postgres
+
+- name: Remove home directory
+  file:
+    state: absent
+    path: "{{ postgres_home }}"
+  when: postgres_remove_existing_home_dir
+
+- name: Create directories
+  file:
+    state: directory
+    path: "{{ item.path }}"
+    mode: 0777
+    owner: "{{ postgres_local_user }}"
+    group: "{{ postgres_local_group }}"
+    recurse: yes
+  with_items: "{{ postgres_directories }}"
+
+- name: Copy pg_hba config
+  template:
+    src: "pg_hba.conf.j2"
+    dest: "{{ postgres_home }}/conf/pg_hba.conf"
+    owner: "{{ postgres_local_user }}"
+    group: "{{ postgres_local_group }}"
+    mode: 0664
+
+- name: Copy postgresql config
+  template:
+    src: "postgresql.conf.j2"
+    dest: "{{ postgres_home }}/conf/postgresql.conf"
+    owner: "{{ postgres_local_user }}"
+    group: "{{ postgres_local_group }}"
+    mode: 0664
+
+- name: Run postgres container
+  docker_container:
+    name: "{{ postgres_name }}"
+    image: "{{ postgres_image }}"
+    command: --config_file=/etc/postgresql/postgresql.conf --hba_file=/etc/postgresql/pg_hba.conf
+    pull: "{{ postgres_pull_image }}"
+    restart_policy: always
+    expose:
+    - 5432
+    ports: "{{ postgres_ports }}"
+    env: "{{ postgres_default_env | combine(postgres_env) }}"
+    volumes: "{{ postgres_directory_volumes }}"
+    log_driver: "{{ postgres_log_driver }}"
+    state: started
+
+- name: Wait for postgres to accept connections
+  wait_for:
+    host: 127.0.0.1
+    port: 5432
+    state: started
+    timeout: 30
+  register: postgres_running
+  until: postgres_running is success
+  retries: 10
+
+- name: Pause 15 seconds for database to be up and running
+  pause:
+    seconds: 15
