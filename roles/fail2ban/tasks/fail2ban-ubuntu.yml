@@ -1,14 +1,14 @@
 ---
 
 - name: Install Fail2Ban from package
-  yum:
+  package:
     name: fail2ban
-    state: present
+    state: latest
     update_cache: yes
 
-- name: Override the basic fail2ban configuration with custom jail.local file for CentOS
+- name: Override the basic fail2ban configuration with custom jail.local file for Ubuntu / Debian
   copy:
-    src: "files/jail_centos.local"
+    src: "files/jail_ubuntu.local"
     dest: "/etc/fail2ban/jail.local"
     owner: root
     group: root
