@@ -1,0 +1,38 @@
+---
+
+- name: "Create {{ apache_conf_path }}/ssl path"
+  file:
+    path: "{{ apache_conf_path }}/ssl"
+    state: directory
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Copy certs private keys
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0640
+  with_items: "{{ apache_keys }}"
+  notify: restart apache
+  diff: no
+
+- name: Copy certs and chains
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ apache_certs }}"
+  notify: restart apache
+
+- name: Create symlinks to certs
+  file:
+    src: '{{ item.dest }}'
+    dest: '{{ item.symlink }}'
+    state: link
+  with_items: "{{ apache_certs }}"
+  notify: restart apache

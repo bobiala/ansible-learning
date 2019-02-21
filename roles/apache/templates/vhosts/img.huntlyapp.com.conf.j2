@@ -1,0 +1,65 @@
+<VirtualHost *:443>
+  ServerName img.huntlyapp.com
+  ServerAlias img.huntlyapp.com
+  ServerAdmin contact@huntlyapp.com
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+  Header always set Strict-Transport-Security "max-age=0; includeSubDomains"
+
+  SSLEngine on
+  SSLProxyEngine on
+  SSLProxyCheckPeerCN off
+  SSLHonorCipherOrder On
+  SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-RSA-AES256-CBC-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES256-SHA:!RC4:!MD5:!aNULL:!EDH
+
+  SSLCertificateChainFile /etc/letsencrypt/live/huntlyapp.com/fullchain.pem
+  SSLCertificateFile /etc/letsencrypt/live/huntlyapp.com/cert.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/huntlyapp.com/privkey.pem
+
+  SetEnvIf Request_URI "([^/]+\.jpg)$" REQUESTED_IMAGE_BASENAME=$1
+  SetEnvIf Request_URI "([^/]+\.png)$" REQUESTED_IMAGE_BASENAME=$1
+  Header set Content-Disposition "attachment; filename=\"%{REQUESTED_IMAGE_BASENAME}e\"" env=REQUESTED_IMAGE_BASENAME
+
+##  Header always set Access-Control-Allow-Origin https://huntlyapp.com
+#  Header add "Access-Control-Allow-Methods" "GET, POST, OPTIONS"
+#  Header add "Access-Control-Allow-Headers" "Authorization"
+
+  DocumentRoot /var/www/img.huntlyapp.com
+  <Directory /var/www/img.huntlyapp.com/ >
+    Options FollowSymLinks MultiViews
+    AllowOverride FileInfo
+    Order allow,deny
+    allow from all
+  </Directory>
+</VirtualHost>
+#<VirtualHost *:80>
+#  ServerName img.huntlyapp.com
+#  ServerAlias img.huntlyapp.com
+#  ServerAdmin contact@huntlyapp.com
+
+#  RewriteEngine On
+#  RewriteCond %{HTTPS} off
+#  RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+#</VirtualHost>
+#<VirtualHost *:80>
+#  ServerName img.huntlyapp.com
+#  ServerAlias img.huntlyapp.com
+#  ServerAdmin contact@huntlyapp.com
+
+#  ErrorLog ${APACHE_LOG_DIR}/error.log
+#  CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+#  RewriteEngine On
+#  RewriteCond %{HTTPS} off
+#  RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+#  DocumentRoot /var/www/img.huntlyapp.com
+#  <Directory /var/www/img.huntlyapp.com/ >
+#    Options FollowSymLinks MultiViews
+#    AllowOverride FileInfo
+#    Order allow,deny
+#    allow from all
+#  </Directory>
+#</VirtualHost>

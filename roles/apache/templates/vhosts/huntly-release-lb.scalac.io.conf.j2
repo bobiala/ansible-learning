@@ -1,0 +1,33 @@
+<VirtualHost *:443>
+  ServerAdmin webmaster@scalac.io
+  ServerName huntly-release-lb.scalac.io
+  ServerAlias huntly-release-lb.scalac.io
+
+  SSLEngine on
+  SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+  SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDS$
+  SSLHonorCipherOrder     on
+  SSLCompression          off
+
+  SSLCertificateChainFile /etc/apache2/ssl/scalac.io.chain.cur.crt
+  SSLCertificateFile /etc/apache2/ssl/scalac.io.cur.crt
+  SSLCertificateKeyFile /etc/apache2/ssl/scalac.io.key
+
+  DocumentRoot /data/projects/jenkins/sites/huntly-backend-release-lb
+  
+   <Directory /data/projects/jenkins/sites/huntly-backend-release-lb>
+    	Options FollowSymLinks MultiViews
+    	AllowOverride none
+    	Require all granted
+   </Directory>
+</VirtualHost>
+
+<VirtualHost *:80>
+  ServerAdmin webmaster@scalac.io
+  ServerName huntly-release-lb.scalac.io
+  ServerAlias huntly-release-lb.scalac.io
+
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+</VirtualHost>

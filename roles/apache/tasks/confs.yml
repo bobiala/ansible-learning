@@ -1,0 +1,41 @@
+---
+
+- name: Adding APACHE_LOG_DIR env in Centos
+  lineinfile:
+    path: /etc/sysconfig/httpd
+    line: 'APACHE_LOG_DIR=/var/log/httpd'
+    state: present
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Copy modules confs on Ubuntu / Debian 
+  template:
+    src: "confs/{{ item }}.j2"
+    dest: "{{ apache_conf_path }}/mods-available/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ apache_module_confs }}"
+  notify: restart apache
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+- name: Enable modules
+  file:
+    src: "{{ apache_conf_path }}/mods-available/{{ item }}"
+    dest: "{{ apache_conf_path }}/mods-enabled/{{ item }}"
+    state: link
+  with_items: "{{ apache_module_confs }}"
+  notify: restart apache
+  when: ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+
+
+- name: Copy modules confs on CentOS
+  template:
+    src: "confs/{{ item }}.j2"
+    dest: "{{ apache_conf_path }}/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ apache_module_confs }}"
+  notify: restart apache
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+

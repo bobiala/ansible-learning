@@ -1,0 +1,34 @@
+<VirtualHost *:80>
+  ServerAdmin webmaster@scalac.io
+  ServerName 021.ventures
+  ServerAlias 021.ventures
+
+
+  ErrorLog ${APACHE_LOG_DIR}/error.log
+  CustomLog ${APACHE_LOG_DIR}/access.log combined
+  Redirect / https://021.ventures
+</VirtualHost>
+<VirtualHost *:443>
+  ServerAdmin webmaster@scalac.io
+  ServerName 021.ventures
+  ServerAlias 021.ventures
+
+  Header always set Strict-Transport-Security "max-age=0; includeSubDomains"
+  Header add "Access-Control-Allow-Methods" "GET, POST, OPTIONS"
+  Header add "Access-Control-Allow-Headers" "Authorization"
+
+#  SetEnvIf Origin "^http(s)?://(.+\.021\.ventures)$" origin_is=$0
+#  Header always set Access-Control-Allow-Origin %{origin_is}e env=origin_is
+
+  SSLEngine on
+  SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+  SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
+  SSLHonorCipherOrder     on
+  SSLCompression          off
+
+  SSLCertificateChainFile /etc/letsencrypt/live/021.ventures/fullchain.pem
+  SSLCertificateFile /etc/letsencrypt/live/021.ventures/cert.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/021.ventures/privkey.pem
+
+ DocumentRoot /var/www/021.ventures
+</VirtualHost>

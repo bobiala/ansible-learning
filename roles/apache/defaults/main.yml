@@ -1,0 +1,10 @@
+---
+apache_keys:
+  - { src: "scalac.io.key", dest: "{{ apache_conf_path }}/ssl/scalac.io.key",  }
+
+apache_certs:
+  - { src: "scalac.io.2019-07-06.chain.crt", dest: "{{ apache_conf_path }}/ssl/scalac.io.2019-07-06.chain.crt", symlink: "{{ apache_conf_path }}/ssl/scalac.io.chain.cur.crt" }
+  - { src: "scalac.io.2019-07-06.crt", dest: "{{ apache_conf_path }}/ssl/scalac.io.2019-07-06.crt", symlink: "{{ apache_conf_path }}/ssl/scalac.io.cur.crt" }
+
+
+

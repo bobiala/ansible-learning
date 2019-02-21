@@ -1,0 +1,5 @@
+---
+- include: modules.yml
+- include: vhosts.yml
+- include: certs.yml
+- include: confs.yml

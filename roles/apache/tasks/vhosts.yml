@@ -1,0 +1,35 @@
+---
+
+- name: Copy vhosts on Ubuntu / Debian
+  template:
+    src: "vhosts/{{ item }}.j2"
+    dest: "{{ apache_conf_path }}/sites-available/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ apache_vhost_confs }}"
+  when: apache_vhost_confs is defined and ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+  notify: restart apache
+  
+
+- name: Add vhost symlink in sites-enabled.
+  file:
+    src: "{{ apache_conf_path }}/sites-available/{{ item }}"
+    dest: "{{ apache_conf_path }}/sites-enabled/{{ item }}"
+    state: link
+  with_items: "{{ apache_vhost_confs }}"
+  when: apache_vhost_confs is defined and ansible_distribution == 'Ubuntu' or ansible_distribution == 'Debian'
+  notify: restart apache
+
+
+- name: Copy vhosts on CentOS
+  template:
+    src: "vhosts/{{ item }}.j2"
+    dest: "{{ apache_conf_path }}/{{ item }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: "{{ apache_vhost_confs }}"
+  when: apache_vhost_confs is defined and ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  notify: restart apache
+  

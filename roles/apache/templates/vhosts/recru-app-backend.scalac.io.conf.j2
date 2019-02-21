@@ -1,0 +1,50 @@
+<VirtualHost *:80>
+  ServerName recru-app-backend.scalac.io
+  Redirect / https://recru-app-backend.scalac.io/
+  RewriteEngine On
+
+  # SetEnvIf Origin "http(s)?://(scalac.io|scalac.io:443|recru-app-devel-backend.scalac.io|recru-app-devel-backend.scalac.io/upload)$" cors=$0
+#  ProxyPass / http://127.0.0.1:20082/
+  # Header unset "Access-Control-Allow-Origin"
+  # Header set "Access-Control-Allow-Origin" %{cors}e env=cors
+  # Header set "Access-Control-Allow-Credentials" "true"
+ # ProxyPassReverse / http://127.0.0.1:20082/
+</VirtualHost>
+<VirtualHost *:443>
+  ServerAdmin webmaster@scalac.io
+  ServerName recru-app-backend.scalac.io
+  ServerAlias recru-app-backend.scalac.io
+
+  ErrorLog ${APACHE_LOG_DIR}/recru-app-backend.scalac.io.error.log
+  CustomLog ${APACHE_LOG_DIR}/recru-app-backend.scalac.io.access.log combined
+
+#  LogLevel dumpio:trace7
+#  DumpIOInput On
+#  DumpIOOutput On
+
+#  RequestHeader set X-Forwarded-Proto "https"
+#  ProxyRequests off
+  ProxyPreserveHost on
+
+  SSLEngine on
+
+
+  SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+  SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
+  SSLHonorCipherOrder     on
+  SSLCompression          off
+
+
+  SSLCertificateChainFile /etc/letsencrypt/live/recru-app-backend.scalac.io/fullchain.pem
+  SSLCertificateFile /etc/letsencrypt/live/recru-app-backend.scalac.io/cert.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/recru-app-backend.scalac.io/privkey.pem
+
+  RewriteEngine On
+
+  # SetEnvIf Origin "http(s)?://(scalac.io|scalac.io:443|recru-app-backend.scalac.io|recru-app-backend.scalac.io/upload)$" cors=$0
+  ProxyPass / http://127.0.0.1:20081/
+  # Header unset "Access-Control-Allow-Origin"
+  # Header set "Access-Control-Allow-Origin" %{cors}e env=cors
+  # Header set "Access-Control-Allow-Credentials" "true"
+  ProxyPassReverse / http://127.0.0.1:20081/
+</VirtualHost>

@@ -1,0 +1,17 @@
+---
+
+- name: Enable ubuntu 15 modules
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  with_items: "{{ apache_ubuntu15_modules }}"
+  when: ansible_facts['os_family'] == "Debian" and ansible_facts['distribution_major_version'] == "15"
+  notify: restart apache
+
+- name: Enable ubuntu 16 modules
+  apache2_module:
+    state: present
+    name: "{{ item }}"
+  with_items: "{{ apache_ubuntu16_modules }}"
+  when: ansible_facts['os_family'] == "Debian" and ansible_facts['distribution_major_version'] == "16"
+  notify: restart apache

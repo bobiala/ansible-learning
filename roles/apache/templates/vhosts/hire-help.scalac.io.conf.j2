@@ -1,0 +1,90 @@
+<VirtualHost *:80>
+  ServerAdmin webmaster@scalac.io
+  ServerName hire-help.scalac.io
+  ServerAlias hire-help.scalac.io
+
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+</VirtualHost>
+<VirtualHost *:443>
+  ServerAdmin webmaster@scalac.io
+  ServerName hire-help.scalac.io
+  ServerAlias hire-help.scalac.io
+
+
+  Header always set Strict-Transport-Security "max-age=0; includeSubDomains"
+#  Header add "Access-Control-Allow-Methods" "GET, POST, OPTIONS"
+#  Header add "Access-Control-Allow-Headers" "Authorization"
+
+#  SetEnvIf Origin "^http(s)?://(.+\.scalac\.io)$" origin_is=$0
+#  Header always set Access-Control-Allow-Origin %{origin_is}e env=origin_is
+
+  SSLEngine on
+  SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+  SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
+  SSLHonorCipherOrder     on
+  SSLCompression          off
+
+  SSLCertificateChainFile /etc/apache2/ssl/scalac.io.chain.cur.crt
+  SSLCertificateFile /etc/apache2/ssl/scalac.io.cur.crt
+  SSLCertificateKeyFile /etc/apache2/ssl/scalac.io.key
+
+ DocumentRoot /var/www/hire-help.scalac.io
+  <Directory "/var/www/hire-help.scalac.io">
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.html$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
+    Options All
+    AllowOverride All
+    Require all granted
+  </Directory>
+</VirtualHost>
+<VirtualHost *:80>
+  ServerAdmin webmaster@scalac.io
+  ServerName hh.scalac.io
+  ServerAlias hh.scalac.io
+
+  RewriteEngine On
+  RewriteCond %{HTTPS} off
+  RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+</VirtualHost>
+<VirtualHost *:443>
+  ServerAdmin webmaster@scalac.io
+  ServerName hh.scalac.io
+  ServerAlias hh.scalac.io
+
+
+  Header always set Strict-Transport-Security "max-age=0; includeSubDomains"
+#  Header add "Access-Control-Allow-Methods" "GET, POST, OPTIONS"
+#  Header add "Access-Control-Allow-Headers" "Authorization"
+
+#  SetEnvIf Origin "^http(s)?://(.+\.scalac\.io)$" origin_is=$0
+#  Header always set Access-Control-Allow-Origin %{origin_is}e env=origin_is
+
+  SSLEngine on
+  SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+  SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
+  SSLHonorCipherOrder     on
+  SSLCompression          off
+
+  SSLCertificateChainFile /etc/apache2/ssl/scalac.io.chain.cur.crt
+  SSLCertificateFile /etc/apache2/ssl/scalac.io.cur.crt
+  SSLCertificateKeyFile /etc/apache2/ssl/scalac.io.key
+
+ DocumentRoot /var/www/hire-help.scalac.io
+  <Directory "/var/www/hire-help.scalac.io">
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.html$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
+    Options All
+    AllowOverride All
+    Require all granted
+  </Directory>
+</VirtualHost>

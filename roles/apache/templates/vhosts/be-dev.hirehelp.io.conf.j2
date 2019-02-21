@@ -1,0 +1,35 @@
+<VirtualHost *:80>
+        ServerAdmin webmaster@scalac.io
+        ServerName be-dev.hirehelp.io
+        ServerAlias be-dev.hirehelp.io
+        LogLevel warn
+        Redirect / https://be-dev.hirehelp.io/
+</VirtualHost>
+<VirtualHost *:443>
+  ServerAdmin webmaster@scalac.io
+  ServerName be-dev.hirehelp.io
+  ServerAlias be-dev.hirehelp.io
+  LogLevel warn
+
+  Header always set Strict-Transport-Security "max-age=0; includeSubDomains"
+  #Header add "Access-Control-Allow-Origin" "*"
+  #Header add "Access-Control-Allow-Methods" "GET, POST, OPTIONS"
+  #Header add "Access-Control-Allow-Headers" "Authorization"
+
+  SSLEngine on
+  SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+  SSLCipherSuite ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA256
+  SSLHonorCipherOrder     on
+  SSLCompression          off
+
+
+
+  SetEnvIf Origin "http(s)?://(fe-dev.hirehelp.io|scalac.hirehelp.io|jitsolutions.hirehelp.io|popestock.hirehelp.io|test-dev.hirehelp.io|localhost:8000|localhost)$" cors=$0
+#  ProxyPreserveHost On
+  ProxyPass / http://localhost:30050/
+  Header unset "Access-Control-Allow-Origin"
+  Header set "Access-Control-Allow-Origin" %{cors}e env=cors
+  ProxyPassReverse / http://localhost:30050/
+  SSLCertificateFile /etc/letsencrypt/live/be-dev.hirehelp.io/fullchain.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/be-dev.hirehelp.io/privkey.pem
+</VirtualHost>

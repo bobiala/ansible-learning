@@ -1,0 +1,43 @@
+---
+
+apache_create_vhosts: false
+apache_remove_default_vhost: true
+apache_ignore_missing_ssl_certificate: false
+apache_mods_enabled:
+  - access_compat.load
+  - alias.load
+  - auth_basic.load
+  - authn_core.load
+  - authn_file.load
+  - authz_core.load
+  - authz_host.load
+  - authz_user.load
+  - autoindex.load
+  - deflate.load
+  - dir.load
+  - dump_io.load
+  - env.load
+  - filter.load
+  - headers.load
+  - mime.load
+  - mpm_prefork.load
+  - negotiation.load
+  - proxy.load
+  - proxy_balancer.load
+  - proxy_http.load
+  - proxy_wstunnel.load
+  - rewrite.load
+  - setenvif.load
+  - slotmem_shm.load
+  - socache_shmcb.load
+  - ssl.load
+  - status.load
+
+apache_ubuntu15_modules:
+  - php5
+
+apache_ubuntu16_modules:
+  - php7.0
+
+apache_module_confs:
+  - mpm_prefork.conf
